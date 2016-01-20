@@ -30,9 +30,7 @@ public class FileStorage implements QueryStorage {
 
     @Override
     public List<String> read(String fileName) throws IOException {
-
-        List<String> lines = Files.readAllLines(Paths.get(dbPath, fileName), charset);
-        return lines;
+        return Files.readAllLines(Paths.get(dbPath, fileName), charset);
     }
 
     @Override
@@ -54,9 +52,7 @@ public class FileStorage implements QueryStorage {
 
     @Override
     public void setNewNumber(Integer queryNumber) throws IOException {
-
-        String numFilePath = Paths.get(dbPath, "num.seq").toString();
-        write(numFilePath, queryNumber.toString());
+        write("num.seq", queryNumber.toString());
     }
 
     @Override
@@ -87,22 +83,31 @@ public class FileStorage implements QueryStorage {
     @Override
     public void add(Integer queryNumber, Query query) throws IOException {
 
-        Integer newQueryNumber = getNewNumber();
+        Integer newQueryNumber;
+
+        try {
+            newQueryNumber= getNewNumber();
+        }
+        catch (IOException e){
+            e.printStackTrace();
+            newQueryNumber = 1;
+        }
 
         // Сохранить номер новой заявки в файл num.seq
         if (queryNumber.equals(newQueryNumber))
-            setNewNumber(newQueryNumber);
+            setNewNumber(++newQueryNumber);
 
         String output, k, v;
 
-        output = String.format("version:1\nnum:%s\n", queryNumber);
+        String lineSeparator = System.getProperty("line.separator");
+        output = String.format("version:1%snum:%s%s", lineSeparator, queryNumber, lineSeparator);
 
         for (Map.Entry<String,String> entry : query.entrySet()){
             k = entry.getKey();
             v = entry.getValue();
             if (k.equals("n") || k.equals("f") || k.equals(""))
                 continue;
-            output += String.format("%s:%s%s", k, v, System.getProperty("line.separator"));
+            output += String.format("%s:%s%s", k, v, lineSeparator);
         }
         write(String.format("%06d.req", queryNumber), output);
     }

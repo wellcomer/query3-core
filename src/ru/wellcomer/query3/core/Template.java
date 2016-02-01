@@ -42,7 +42,7 @@ public class Template {
         String[] cellMap, varTemplate;
 
         // Read file with templates
-        List<String> lines = Files.readAllLines(Paths.get(templatePath, "var.template"), Charset.defaultCharset());
+        List<String> lines = Files.readAllLines(Paths.get(templatePath, "var.template"), Charset.forName("UTF-8"));
 
         // Render templates and put them to the map
         for (String line : lines){
@@ -63,7 +63,7 @@ public class Template {
             map.put(varTemplate[0], strTemplate.render());
         }
 
-        lines = Files.readAllLines(Paths.get(templatePath, templateName + ".ods.map"), Charset.defaultCharset());
+        lines = Files.readAllLines(Paths.get(templatePath, templateName + ".ods.map"), Charset.forName("UTF-8"));
 
         for (String line : lines) {
             line = line.trim();

@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.attribute.FileTime;
@@ -138,6 +139,8 @@ public class Autocomplete {
             Files.setLastModifiedTime(timestampFilePath, FileTime.fromMillis(System.currentTimeMillis()));
         }
         catch (IOException e){
+            if (e.getClass().getSimpleName().equals("NoSuchFileException"))
+                Files.createFile(timestampFilePath);
             e.printStackTrace();
         }
     }

@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
     http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>ru.wellcomer.query3</groupId>
+    <groupId>com.github.wellcomer.query3</groupId>
     <artifactId>query3-core</artifactId>
     <packaging>jar</packaging>
     <version>1.0</version>
@@ -14,7 +14,7 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.5</version>
+            <version>2.6</version>
         </dependency>
         <dependency>
             <groupId>com.googlecode.json-simple</groupId>
@@ -98,7 +98,7 @@
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <!--<addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>-->
-                            <mainClass>ru.wellcomer.query3.core.Main</mainClass>
+                            <mainClass>com.github.wellcomer.query3.core.Main</mainClass>
                         </manifest>
                         <manifestEntries>
                             <Implementation-Build>${buildNumber}</Implementation-Build>

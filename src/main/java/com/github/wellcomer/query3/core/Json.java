@@ -1,4 +1,4 @@
-package ru.wellcomer.query3.core;
+package com.github.wellcomer.query3.core;
 
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;

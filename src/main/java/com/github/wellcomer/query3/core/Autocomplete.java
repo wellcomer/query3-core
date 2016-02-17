@@ -1,4 +1,4 @@
-package ru.wellcomer.query3.core;
+package com.github.wellcomer.query3.core;
 
 import org.apache.commons.lang.StringUtils;
 

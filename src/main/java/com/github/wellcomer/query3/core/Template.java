@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2016. Sergey V. Katunin <sergey.blaster@gmail.com>
+ * Licensed under the Apache License, Version 2.0
+ */
+
 package com.github.wellcomer.query3.core;
 
 import org.jopendocument.dom.spreadsheet.Sheet;
@@ -38,7 +43,7 @@ public class Template {
      */
     public String fillAndSave (HashMap<String,String> map, String templateName, String saveToPath) throws IOException {
 
-        HashMap<String,String> cellAddress = new HashMap<String,String>();
+        HashMap<String,String> cellAddress = new HashMap<>();
         String[] cellMap, varTemplate;
 
         // Read file with templates

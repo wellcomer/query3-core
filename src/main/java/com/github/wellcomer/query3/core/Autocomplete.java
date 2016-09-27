@@ -44,6 +44,8 @@ public class Autocomplete {
 
     @param fileName имя файла.
     @param regex регулярное выражение.
+    @return Cписок строк автодополнения.
+    @throws IOException
 */
     public List<String> get (String fileName, String regex) throws IOException {
 
@@ -74,6 +76,7 @@ public class Autocomplete {
     @param queryList список заявок.
     @param scanModifiedOnly сканировать только измененные заявки.
     @param mergePrevious слияние с уже существующими файлами автокомплита.
+    @throws IOException
 */
     public void autolearn (QueryList queryList, boolean scanModifiedOnly, boolean mergePrevious) throws IOException {
 

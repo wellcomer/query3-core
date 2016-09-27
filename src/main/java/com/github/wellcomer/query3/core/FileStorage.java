@@ -29,8 +29,26 @@ public class FileStorage implements QueryStorage {
     private Charset charset;
 
     public FileStorage(String dbPath, String charsetName){
+
         this.dbPath = dbPath;
         this.charset = Charset.forName(charsetName);
+
+        if (!Files.exists(Paths.get(dbPath))) {
+            try {
+                Files.createDirectories(Paths.get(dbPath));
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+        }
+        if (!Files.exists(Paths.get(dbPath,"num.seq"))){
+            try {
+                setNewNumber(1);
+            }
+            catch (IOException e){
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -47,6 +65,18 @@ public class FileStorage implements QueryStorage {
         fileNumSeq.write(data);
         fileNumSeq.flush();
         fileNumSeq.close();
+    }
+    @Override
+    public boolean autoCommit () {
+        return true;
+    }
+
+    @Override
+    public void autoCommit (boolean flagAutoCommit){
+    }
+
+    @Override
+    public void commit () {
     }
 
     @Override
@@ -102,10 +132,13 @@ public class FileStorage implements QueryStorage {
         if (queryNumber.equals(newQueryNumber))
             setNewNumber(++newQueryNumber);
 
-        String output, k, v;
-
+        String output = "", k, v;
         String lineSeparator = System.getProperty("line.separator");
-        output = String.format("version:1%snum:%s%s", lineSeparator, queryNumber, lineSeparator);
+
+        if (!query.containsKey("version"))
+            output = String.format("version:1%s", lineSeparator);
+        if (!query.containsKey("num"))
+            output += String.format("num:%s%s", queryNumber, lineSeparator);
 
         for (Map.Entry<String,String> entry : query.entrySet()){
             k = entry.getKey();
@@ -119,10 +152,15 @@ public class FileStorage implements QueryStorage {
 
     @Override
     public Integer size() {
-        List<String> idList = idList(0);
-        if (idList == null)
+        Integer newNumber;
+        try {
+            newNumber = getNewNumber();
+        }
+        catch (IOException e){
+            e.printStackTrace();
             return 0;
-        return idList.size();
+        }
+        return newNumber-1;
     }
 
     @Override
@@ -152,5 +190,9 @@ public class FileStorage implements QueryStorage {
         Collections.sort(sortedFileList);
 
         return sortedFileList;
+    }
+
+    @Override
+    public void close() {
     }
 }

@@ -5,7 +5,6 @@
 
 package com.github.wellcomer.query3.core;
 
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 
@@ -15,29 +14,33 @@ import java.util.List;
  */
 public class QueryIterator implements Iterator<Query> {
 
-    private QueryList queryList;
     private Integer queryIterator;
     List<String> idList;
+    QueryStorage stgBackend;
 
-    public QueryIterator(QueryList parent, long modifiedSince){
-        queryList = parent;
-        idList = queryList.idList(modifiedSince);
+    public QueryIterator(QueryStorage stgBackend, long modifiedSince){
+        this.stgBackend = stgBackend;
+        try {
+            idList = stgBackend.idList(modifiedSince);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            this.stgBackend = null;
+        }
         queryIterator = 0;
     }
 
     @Override
     public boolean hasNext() {
-        if (queryIterator >= idList.size())
-            return false;
-        return true;
+        return !(stgBackend == null || queryIterator >= idList.size());
     }
 
     @Override
     public Query next() {
         try {
             String queryID = idList.get(queryIterator++);
-            return queryList.get(queryID);
-        } catch (IOException e) {
+            return stgBackend.get(queryID);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

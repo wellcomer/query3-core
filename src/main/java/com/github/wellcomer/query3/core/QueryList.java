@@ -5,17 +5,26 @@
 
 package com.github.wellcomer.query3.core;
 
-import java.io.*;
 import java.util.*;
 
 /**
  * <h3>Список заявок.</h3>
  * Created on 18.11.15.
  */
-public class QueryList extends FileStorage {
+public class QueryList {
 
-    public QueryList(String dbPath, String charsetName) {
-        super(dbPath, charsetName);
+    private QueryStorage stgBackend;
+
+    public QueryList(QueryStorage stgBackend) {
+        setStorageBackend(stgBackend);
+    }
+
+    public QueryStorage getStorageBackend (){
+        return stgBackend;
+    }
+
+    public void setStorageBackend (QueryStorage stgBackend){
+        this.stgBackend = stgBackend;
     }
 
     // Номер заявки из пути к заявке
@@ -27,11 +36,11 @@ public class QueryList extends FileStorage {
     }*/
 
     public Iterator<Query> iterator(){
-        return new QueryIterator(this, 0);
+        return new QueryIterator(stgBackend, 0);
     }
 
     public Iterator<Query> iterator(long modifiedSince){
-        return new QueryIterator(this, modifiedSince);
+        return new QueryIterator(stgBackend, modifiedSince);
     }
 
     /*public boolean grep(String fileName, ArrayList<String> patterns) throws IOException {
@@ -66,12 +75,12 @@ public class QueryList extends FileStorage {
     public List<Integer> find(Query query){
 
         List<Integer> queryNumbers = new LinkedList<>();
-        List<String> idList = idList(0);
+        List<String> idList = stgBackend.idList(0);
 
         for (String queryID : idList){
             try {
 
-                Query nextQuery = get(queryID);
+                Query nextQuery = stgBackend.get(queryID);
                 boolean match = true;
 
                 for (Map.Entry<String,String> entry: query.entrySet()){
@@ -87,12 +96,10 @@ public class QueryList extends FileStorage {
                     if (match)
                         queryNumbers.add(Integer.decode(nextQuery.get("num")));
                 }
-                catch (NullPointerException e){
-                    continue;
-                }
+                catch (NullPointerException e){}
 
             }
-            catch (IOException e) {
+            catch (Exception e) {
                 e.printStackTrace();
             }
         }

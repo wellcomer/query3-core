@@ -5,7 +5,7 @@
 
 package com.github.wellcomer.query3.core;
 
-import java.io.IOException;
+import java.lang.Exception;
 import java.util.List;
 
 /**
@@ -18,65 +18,84 @@ public interface QueryStorage {
      * Чтение данных.
      * @param dataID Идентификатор данных в хранилище (имя файла или записи в БД).
      * @return Список строк.
-     * @throws IOException
+     * @throws Exception
      */
-    List<String> read (String dataID) throws IOException;
+    List<String> read (String dataID) throws Exception;
 
     /**
      * Запись данных.
      * @param dataID Идентификатор данных в хранилище (имя файла или записи в БД).
      * @param data Строка с данными.
-     * @throws IOException
+     * @throws Exception
      */
-    void write (String dataID, String data) throws IOException;
+    void write (String dataID, String data) throws Exception;
+
+    /**
+     * Коммит изменений.
+     * @throws Exception
+     */
+    void commit () throws Exception;
+
+    /**
+     * Получить состояние флага автокоммита.
+     * @return Флаг автокоммита.
+     */
+    boolean autoCommit ();
+
+    /**
+     * Установить флаг автокоммита.
+     * @param flagAutoCommit Флаг автокоммита (true|false).
+     */
+    void autoCommit (boolean flagAutoCommit);
 
     /**
      * Получить номер новой заявки.
      * @return номер заявки.
-     * @throws IOException
+     * @throws Exception
      */
-    Integer getNewNumber() throws IOException;
+    Integer getNewNumber() throws Exception;
 
     /**
      * Установить номер новой заявки.
      * @param queryNumber номер заявки.
-     * @throws IOException
+     * @throws Exception
      */
-    void setNewNumber(Integer queryNumber) throws IOException;
+    void setNewNumber(Integer queryNumber) throws Exception;
 
     /**
      * Получить заявку.
      * @param queryNumber номер заявки.
      * @return объект с загруженной заявкой.
-     * @throws IOException
+     * @throws Exception
      */
-    Query get(Integer queryNumber) throws IOException;
+    Query get(Integer queryNumber) throws Exception;
 
     /**
      * Получить заявку.
      * @param queryID идентификатор заявки.
      * @return объект с загруженной заявкой.
-     * @throws IOException
+     * @throws Exception
      */
-    Query get(String queryID) throws IOException;
+    Query get(String queryID) throws Exception;
 
     /**
      * Добавить новую заявку (номер присваивается автоматически).
      * @param query объект с заявкой.
-     * @throws IOException
+     * @throws Exception
      */
-    void add(Query query) throws IOException;
+    void add(Query query) throws Exception;
 
     /**
      * Добавить заявку.
      * @param queryNumber номер заявки.
      * @param query объект с заявкой.
-     * @throws IOException
+     * @throws Exception
      */
-    void add(Integer queryNumber, Query query) throws IOException;
+    void add(Integer queryNumber, Query query) throws Exception;
 
     /**
-     * Количество заявок в хранилище.
+     * Количество объектов(заявка) в хранилище.
+     * @return Количество
      */
     Integer size ();
 
@@ -86,4 +105,10 @@ public interface QueryStorage {
      * @return Список строк (идентификаторов).
      */
     List<String> idList (long modifiedSince);
+
+    /**
+     * Деструктор.
+     * @throws Exception
+     */
+    void close () throws Exception;
 }

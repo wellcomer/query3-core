@@ -5,9 +5,12 @@
 
 package com.github.wellcomer.query3.core;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.io.IOException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.nio.file.Paths;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -28,12 +31,32 @@ public class Main {
         return manifest;
     }
 
-    QueryStorage getStgBackendInstance (String stgBackendName, String dbPath, String charset){
+    /**
+     * Получить экземпляр класса хранилища.
+     * @param stgBackendName Имя бэкенда хранилища (file|mapdb).
+     * @param dbPath Путь к базе данных.
+     * @param dbName Имя базы данных.
+     * @param charset Кодовая страница.
+     * @return Список с номерами найденных заявок.
+     */
+
+    @Nullable
+    public static QueryStorage getStgBackendInstance (String stgBackendName, String dbPath, String dbName, String charset){
+
+        if (charset.isEmpty() || charset.equalsIgnoreCase("default"))
+            charset = "UTF-8";
+
         switch (stgBackendName.toLowerCase()){
             case "file":
-                return new FileStorage(dbPath,charset);
+                if (dbName.equalsIgnoreCase("default"))
+                    dbName = ".db";
+                dbPath = Paths.get(dbPath, dbName).toString();
+                return new FileStorage(dbPath, charset);
             case "mapdb":
-                return new MapDBStorage(dbPath,charset);
+                if (dbName.equalsIgnoreCase("default"))
+                    dbName = "map.db";
+                dbPath = Paths.get(dbPath, dbName).toString();
+                return new MapDBStorage(dbPath, charset);
         }
         return null;
     }
@@ -57,8 +80,8 @@ public class Main {
                     Integer stg1Size = 0, stg2Size;
 
                     try {
-                        stg1 = main.getStgBackendInstance(stgBackendName[0], dbPath[0], "UTF-8");
-                        stg2 = main.getStgBackendInstance(stgBackendName[1], dbPath[1], "UTF-8");
+                        stg1 = getStgBackendInstance(stgBackendName[0], dbPath[0], "", "UTF-8");
+                        stg2 = getStgBackendInstance(stgBackendName[1], dbPath[1], "", "UTF-8");
 
                         stg1Size = stg1.size();
                         stg2Size = stg2.size();

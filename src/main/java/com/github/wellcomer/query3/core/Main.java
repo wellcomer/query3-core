@@ -37,20 +37,23 @@ public class Main {
      * @param dbPath Путь к базе данных.
      * @param dbName Имя базы данных.
      * @param charset Кодовая страница.
-     * @return Список с номерами найденных заявок.
+     * @return QueryStorage экземпляр класса хранилища.
      */
 
     @Nullable
     public static QueryStorage getStgBackendInstance (String stgBackendName, String dbPath, String dbName, String charset){
 
-        if (charset.isEmpty() || charset.equalsIgnoreCase("default"))
+        if (charset == null || charset.isEmpty() || charset.equalsIgnoreCase("default"))
             charset = "UTF-8";
+
+        if (stgBackendName == null || dbPath == null)
+            return null;
+
+        if (dbName == null)
+            dbName = "";
 
         switch (stgBackendName.toLowerCase()){
             case "file":
-                if (dbName.equalsIgnoreCase("default"))
-                    dbName = ".db";
-                dbPath = Paths.get(dbPath, dbName).toString();
                 return new FileStorage(dbPath, charset);
             case "mapdb":
                 if (dbName.equalsIgnoreCase("default"))

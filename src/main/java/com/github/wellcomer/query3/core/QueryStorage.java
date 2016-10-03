@@ -5,6 +5,7 @@
 
 package com.github.wellcomer.query3.core;
 
+import java.io.IOException;
 import java.lang.Exception;
 import java.util.List;
 
@@ -68,7 +69,9 @@ public interface QueryStorage {
      * @return объект с загруженной заявкой.
      * @throws Exception
      */
-    Query get(Integer queryNumber) throws Exception;
+    default Query get(Integer queryNumber) throws Exception {
+        return get (Integer.toString(queryNumber));
+    }
 
     /**
      * Получить заявку.
@@ -76,7 +79,19 @@ public interface QueryStorage {
      * @return объект с загруженной заявкой.
      * @throws Exception
      */
-    Query get(String queryID) throws Exception;
+    default Query get(String queryID) throws Exception {
+
+        List<String> lines= read(queryID);
+
+        Query query = new Query();
+        String kv[];
+
+        for (String line : lines) {
+            kv = line.split(":", 2);
+            query.put(kv[0].trim(), kv[1].trim());
+        }
+        return query;
+    }
 
     /**
      * Добавить новую заявку (номер присваивается автоматически).

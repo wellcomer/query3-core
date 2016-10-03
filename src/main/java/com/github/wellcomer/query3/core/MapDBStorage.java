@@ -77,26 +77,6 @@ public class MapDBStorage implements QueryStorage {
     }
 
     @Override
-    public Query get(Integer queryNumber) throws Exception {
-        return get (Integer.toString(queryNumber));
-    }
-
-    @Override
-    public Query get(String queryID) throws Exception {
-
-        List<String> lines= read(queryID);
-
-        Query query = new Query();
-        String kv[];
-
-        for (String line : lines) {
-            kv = line.split(":", 2);
-            query.put(kv[0].trim(), kv[1].trim());
-        }
-        return query;
-    }
-
-    @Override
     public void add(Query query) throws Exception {
         add(getNewNumber(), query);
     }

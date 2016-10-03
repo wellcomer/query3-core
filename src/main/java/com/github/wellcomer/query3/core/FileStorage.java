@@ -91,23 +91,8 @@ public class FileStorage implements QueryStorage {
     }
 
     @Override
-    public Query get(Integer queryNumber) throws IOException {
+    public Query get(Integer queryNumber) throws Exception {
         return get(String.format("%06d.req", queryNumber));
-    }
-
-    @Override
-    public Query get(String queryID) throws IOException {
-
-        List<String> lines= read(queryID);
-
-        Query query = new Query();
-        String kv[];
-
-        for (String line : lines) {
-            kv = line.split(":", 2);
-            query.put(kv[0].trim(), kv[1].trim());
-        }
-        return query;
     }
 
     @Override

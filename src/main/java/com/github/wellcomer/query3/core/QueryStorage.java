@@ -5,7 +5,6 @@
 
 package com.github.wellcomer.query3.core;
 
-import java.io.IOException;
 import java.lang.Exception;
 import java.util.List;
 
@@ -61,7 +60,8 @@ public interface QueryStorage {
      * @param queryNumber номер заявки.
      * @throws Exception
      */
-    void setNewNumber(Integer queryNumber) throws Exception;
+    default void setNewNumber(Integer queryNumber) throws Exception {
+    }
 
     /**
      * Получить заявку.
@@ -98,7 +98,9 @@ public interface QueryStorage {
      * @param query объект с заявкой.
      * @throws Exception
      */
-    void add(Query query) throws Exception;
+    default void add(Query query) throws Exception {
+        add(getNewNumber(), query);
+    }
 
     /**
      * Добавить заявку.

@@ -45,19 +45,19 @@ public class FileStorage implements QueryStorage {
             try {
                 setNewNumber(1);
             }
-            catch (IOException e){
+            catch (Exception e){
                 e.printStackTrace();
             }
         }
     }
 
     @Override
-    public List<String> read(String fileName) throws IOException {
+    public List<String> read(String fileName) throws Exception {
         return Files.readAllLines(Paths.get(dbPath, fileName), charset);
     }
 
     @Override
-    public void write(String dataID, String data) throws IOException {
+    public void write(String dataID, String data) throws Exception {
 
         Path filePath = Paths.get(dbPath, dataID);
 
@@ -80,13 +80,13 @@ public class FileStorage implements QueryStorage {
     }
 
     @Override
-    public Integer getNewNumber() throws IOException {
+    public Integer getNewNumber() throws Exception {
         List<String> lines = read("num.seq");
         return Integer.parseInt(lines.get(0));
     }
 
     @Override
-    public void setNewNumber(Integer queryNumber) throws IOException {
+    public void setNewNumber(Integer queryNumber) throws Exception {
         write("num.seq", queryNumber.toString());
     }
 
@@ -96,12 +96,7 @@ public class FileStorage implements QueryStorage {
     }
 
     @Override
-    public void add(Query query) throws IOException {
-        add(getNewNumber(), query);
-    }
-
-    @Override
-    public void add(Integer queryNumber, Query query) throws IOException {
+    public void add(Integer queryNumber, Query query) throws Exception {
 
         Integer newQueryNumber;
 
@@ -141,7 +136,7 @@ public class FileStorage implements QueryStorage {
         try {
             newNumber = getNewNumber();
         }
-        catch (IOException e){
+        catch (Exception e){
             e.printStackTrace();
             return 0;
         }

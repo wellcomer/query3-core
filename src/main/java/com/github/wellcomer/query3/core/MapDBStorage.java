@@ -73,15 +73,6 @@ public class MapDBStorage implements QueryStorage {
     }
 
     @Override
-    public void setNewNumber(Integer queryNumber) throws Exception {
-    }
-
-    @Override
-    public void add(Query query) throws Exception {
-        add(getNewNumber(), query);
-    }
-
-    @Override
     public void add(Integer queryNumber, Query query) throws Exception {
 
         String output = "", k, v;
